@@ -1,0 +1,10 @@
+#script {width: 100%}
+.console_result {
+    background-color: black;
+    color: white;
+    margin: 1em 0;
+}
+
+.return {
+    background-color: blue;
+}

@@ -1,0 +1,12 @@
+Console
+=======
+
+A Rails 3 plugin for running Ruby scripts on the browser in the context of a controller action.
+
+Just put it in your vendor/plugins/console. For instance:
+
+git submodule add git://github.com/rosenfeld/rails-web-console.git vendor/plugins/console
+
+Then, access "/console" in your browser.
+
+Copyright (c) 2010 [Rodrigo Rosenfeld Rosas], released under the MIT license
