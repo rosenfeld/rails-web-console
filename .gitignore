@@ -1,1 +1,8 @@
 *.swp
+pkg
+Marshal*
+latest_specs*
+prerelease_specs*
+quick
+specs.*
+yaml*
