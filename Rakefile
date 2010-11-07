@@ -5,6 +5,7 @@ begin
     gem.summary = "A web console for Rails"
     gem.email = "rr_rosas@yahoo.com.br"
     gem.authors = ["Rodrigo Rosenfeld Rosas"]
+    gem.homepage = "https://github.com/rosenfeld/rails-web-console"
     gem.files = Dir["{lib}/**/*", "{app}/**/*", "{public}/**/*", "{config}/**/*"]
   end
   Jeweler::GemcutterTasks.new
