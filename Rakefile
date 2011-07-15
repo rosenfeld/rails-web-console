@@ -3,7 +3,7 @@ begin
   Jeweler::Tasks.new do |gem|
     gem.name = "rails-web-console"
     gem.summary = "A web console for Rails"
-    gem.email = "rr_rosas@yahoo.com.br"
+    gem.email = "rr.rosas@gmail.com"
     gem.authors = ["Rodrigo Rosenfeld Rosas"]
     gem.homepage = "https://github.com/rosenfeld/rails-web-console"
     gem.files = Dir["{lib}/**/*", "{app}/**/*", "{public}/**/*", "{config}/**/*"]
