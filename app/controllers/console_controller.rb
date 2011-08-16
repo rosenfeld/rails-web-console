@@ -16,7 +16,7 @@ class ConsoleController < ApplicationController
       result = e.to_s
     end
     $stdout = stdout_orig
-    render text: result.gsub("\n", "<br />\n")
+    render :text => result.gsub("\n", "<br />\n")
   end
 
 private
