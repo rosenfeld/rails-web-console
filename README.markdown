@@ -1,7 +1,7 @@
 Console
 =======
 
-A Rails 3.1 engine for running Ruby scripts on the browser in the context of a controller action.
+A Rails 3.1 and above engine for running Ruby scripts on the browser in the context of a controller action.
 
 You can install it as a gem or putting it in your vendor/plugins/console directory.
 
@@ -11,7 +11,7 @@ Installing as a Gem (preferred method)
 In your Gemfile, put the dependency like this:
 
 <pre>
-gem 'rails-web-console', :require => 'console', :group => :development
+gem 'rails-web-console', :group => :development
 </pre>
 
 If you intend to use this in production environment (strongly discouraged), be sure to protect console routes. Do it on your own risk!
