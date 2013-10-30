@@ -39,3 +39,7 @@ Take a look at older releases of this gem for supporting older Rails.
 
 
 Copyright (c) 2010 [Rodrigo Rosenfeld Rosas], released under the MIT license
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/rosenfeld/rails-web-console/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
