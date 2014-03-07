@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Console</title>
+  <style>
+    #script {width: 100%}
+    .console_result {
+        background-color: black;
+        color: white;
+        margin: 1em 0;
+    }
+
+    .return {
+        background-color: blue;
+    }
+  </style>
+</head>
+<body>
+  <textarea id="script" rows="10" cols="80"><%= session[:script] %></textarea>
+  <div>
+    <button id=clear-results>Clear (Esc, Esc)</button>
+    <button id=run-script>Run (Ctrl+Enter)</button>
+  </div>
+  <div id="results"></div>
+
+  <script>
+  var run_path = '<%= rails_web_console.run_path %>', lastEscTime = 0,
+      results = $el('results'), runScriptButton = $el('run-script'),
+      clearResultsButton = $el('clear-results'), script = $el('script'), request
+    function $el(id){ return document.getElementById(id) }
+    addEventListener(clearResultsButton, 'click', clearResults)
+    addEventListener(runScriptButton, 'click', runScript)
+    addEventListener(script, 'keydown', onKeyDown)
+    function addEventListener(el, eventName, handler) {
+      if (el.addEventListener) el.addEventListener(eventName, handler);
+      else el.attachEvent('on' + eventName, handler);
+    }
+    function clearResults() {
+      results.innerHTML = ''
+    }
+    function runScript() {
+      request = new XMLHttpRequest()
+      request.open('POST', run_path, true)
+      request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8')
+      request.onreadystatechange = function() {
+        if (!(this.readyState === 4 && this.status >= 200 && this.status < 400)) return
+        var div = document.createElement('div')
+        div.setAttribute('class', 'console_result')
+        div.innerHTML = this.responseText
+        results.appendChild(div)
+      }
+      request.send('script=' + encodeURIComponent(script.value))
+    }
+    function onKeyDown(ev) {
+      if (ev.ctrlKey && ev.keyCode == 13) runScript() // Ctrl + Enter
+      if (ev.keyCode == 27) {
+        if (new Date().getTime() - lastEscTime < 1000) clearResults() // Esc, Esc within a second
+        lastEscTime = new Date().getTime()
+      }
+    }
+  </script>
+</body>
+</html>

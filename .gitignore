@@ -1,8 +1,5 @@
-*.swp
-pkg
-Marshal*
-latest_specs*
-prerelease_specs*
-quick
-specs.*
-yaml*
+.bundle/
+log/*.log
+pkg/
+/test_app/log/*.log
+/test_app/tmp
