@@ -103,6 +103,8 @@
   </div>
 
   <script>
+    var commandHistory = [];
+    var commandIndex = 0;
     var run_path = '<%= rails_web_console.run_path %>';
     var results = $('#results');
     var runScriptButton = $('#run-script');
@@ -122,6 +124,7 @@
 
     function runScript() {
       var command = script.val();
+      commandHistory.push(command);
 
       out("&#10095; "+command, 'command');
 
@@ -138,6 +141,23 @@
         ev.preventDefault();
         script.val('');
         script[0].scrollIntoView();
+      }
+      if (ev.keyCode == 38) { //UP
+        if (commandIndex > 0) {
+          commandIndex -= 1;
+        }
+        script.val(commandHistory[commandIndex]);
+      }
+      if (ev.keyCode == 40) { //DOWN
+        if (commandIndex < commandHistory.length) {
+          commandIndex += 1;
+        }
+        if (commandIndex == commandHistory.length) {
+          // scroll down to get empty prompt again
+          script.val('');
+        } else { 
+          script.val(commandHistory[commandIndex]);
+        }
       }
     }
   </script>
