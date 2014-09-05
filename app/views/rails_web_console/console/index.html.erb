@@ -3,59 +3,144 @@
 <head>
   <title>Console</title>
   <style>
-    #script {width: 100%}
-    .console_result {
-        background-color: black;
-        color: white;
-        margin: 1em 0;
+    body {
+      overflow-y: scroll;
+      background-color: #000;
+      color: silver;
+      padding: 6px;
+    }
+    * {
+      margin: 0;
+      padding: 0;
+      font-family: Monaco, "Lucida Console", monospace;
+      font-size: 14px;
+      box-sizing: border-box;
     }
 
+    html {
+      background: #000;
+      font-size: 14px;
+    }
+
+    .buttons {
+      color: black;
+      text-align: right;
+    }
+    .buttons button {
+      background: transparent;
+      color: #888;
+      border: none;
+      padding-right: 18px;
+    }
+    .environment {
+      color: white;
+      /*float: left;*/
+    }
+    #results {
+    }
+    .command-wrap {
+      clear: both;
+      position: relative;
+      background: #222;
+      width: 100%;
+    }
+    .command-wrap .prompt {
+      position: absolute;
+      top: 0;
+      left: 0px;
+      font-weight: bold;
+      color: white;
+    }
+    #script {
+      display: block;
+      resize: none;
+      overflow: hidden;
+      background: transparent;
+      border: none;
+      color: white;
+      width: 100%;
+      padding-left: 15px;
+    }
+    textarea:focus {
+      outline: none;
+    }
+    .console_result {
+    }
+
+    .command {
+      color: silver;
+    }
+    .type-stdout {
+    }
+    .type-String {
+      color: #65b042;
+    }
+    .type-Fixnum {
+      color: #3487cc;
+    }
+
+      
     .return {
-        background-color: blue;
+      color: white;
     }
   </style>
+  <script src="//code.jquery.com/jquery-2.1.1.min.js" type="text/javascript"></script>
 </head>
 <body>
-  <textarea id="script" rows="10" cols="80"><%= session[:script] %></textarea>
-  <div>
-    <button id=clear-results>Clear (Esc, Esc)</button>
-    <button id=run-script>Run (Ctrl+Enter)</button>
+  <div class="buttons">
+    <span class="environment">
+      <%= Rails.application.class.parent_name + ":"+Rails.env.to_s %>
+    </span>
+    <button id=run-script>Run (Enter)</button>
   </div>
   <div id="results"></div>
+  <div class="command-wrap">
+    <div class="prompt">
+    &#10095;
+    </div>
+    <textarea id="script" rows="1" cols="80"><%= session[:script] %></textarea>
+  </div>
 
   <script>
-  var run_path = '<%= rails_web_console.run_path %>', lastEscTime = 0,
-      results = $el('results'), runScriptButton = $el('run-script'),
-      clearResultsButton = $el('clear-results'), script = $el('script'), request
-    function $el(id){ return document.getElementById(id) }
-    addEventListener(clearResultsButton, 'click', clearResults)
-    addEventListener(runScriptButton, 'click', runScript)
-    addEventListener(script, 'keydown', onKeyDown)
-    function addEventListener(el, eventName, handler) {
-      if (el.addEventListener) el.addEventListener(eventName, handler);
-      else el.attachEvent('on' + eventName, handler);
-    }
+    var run_path = '<%= rails_web_console.run_path %>';
+    var results = $('#results');
+    var runScriptButton = $('#run-script');
+
+    var script = $('#script');
+    script[0].focus();
+
+    runScriptButton.on('click', runScript);
+    script.on('keydown', onKeyDown);
+
     function clearResults() {
-      results.innerHTML = ''
+      results.html();
     }
+
+    function out(content, className) {
+      var div = document.createElement('div');
+      div.setAttribute('class', className || '');
+      div.innerHTML = content;
+      results.append(div);
+    }
+
     function runScript() {
-      request = new XMLHttpRequest()
-      request.open('POST', run_path, true)
-      request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8')
-      request.onreadystatechange = function() {
-        if (!(this.readyState === 4 && this.status >= 200 && this.status < 400)) return
-        var div = document.createElement('div')
-        div.setAttribute('class', 'console_result')
-        div.innerHTML = this.responseText
-        results.appendChild(div)
-      }
-      request.send('script=' + encodeURIComponent(script.value))
+      var command = script.val();
+
+      out("&#10095; "+command, 'command');
+
+      $.post(run_path, {script: command}, function(response) {
+        out(response.stdout, 'result type-stdout');
+        out(response.value, 'result type-'+response.type);
+      }, 'json')
+
     }
+
     function onKeyDown(ev) {
-      if (ev.ctrlKey && ev.keyCode == 13) runScript() // Ctrl + Enter
-      if (ev.keyCode == 27) {
-        if (new Date().getTime() - lastEscTime < 1000) clearResults() // Esc, Esc within a second
-        lastEscTime = new Date().getTime()
+      if (ev.keyCode == 13) {
+        runScript();
+        ev.preventDefault();
+        script.val('');
+        script[0].scrollIntoView();
       }
     }
   </script>

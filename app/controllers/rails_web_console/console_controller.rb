@@ -10,18 +10,25 @@ module RailsWebConsole
 
     def run
       session[:script] = params[:script]
+
+      stdout = ''
       stdout_orig = $stdout
       $stdout = StringIO.new
       begin
         result_eval = eval params[:script], binding
         $stdout.rewind
-        result = %Q{<div class="stdout">#{escape $stdout.read}</div>
-          <div class="return">#{escape result_eval.inspect}</div>}
+        stdout = 'error during stdout capture'
+        stdout = escape $stdout.read
+        result = result_eval
       rescue => e
         result = e.to_s
       end
       $stdout = stdout_orig
-      render text: result.gsub("\n", "<br>\n")
+      render(json: {
+        stdout: stdout,
+        value: escape(result),
+        type: result.class.name
+      })
     end
 
     private
