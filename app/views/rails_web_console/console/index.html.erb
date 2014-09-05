@@ -8,6 +8,7 @@
       background-color: #000;
       color: silver;
       padding: 6px;
+      overflow-y: auto;
     }
     * {
       margin: 0;
@@ -111,10 +112,6 @@
 
     runScriptButton.on('click', runScript);
     script.on('keydown', onKeyDown);
-
-    function clearResults() {
-      results.html();
-    }
 
     function out(content, className) {
       var div = document.createElement('div');
