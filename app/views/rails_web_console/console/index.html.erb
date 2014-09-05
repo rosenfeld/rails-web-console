@@ -20,7 +20,7 @@
 
     html {
       background: #000;
-      font-size: 14px;
+      font-size: 13px;
     }
 
     .buttons {
@@ -72,6 +72,7 @@
       color: silver;
     }
     .type-stdout {
+      white-space: pre;
     }
     .type-String {
       color: #65b042;
@@ -102,7 +103,7 @@
     <div class="prompt">
     &#10095;
     </div>
-    <textarea id="script" rows="1" cols="80"><%= session[:script] %></textarea>
+    <textarea id="script" rows="1" cols="80"></textarea>
   </div>
 
   <script>
@@ -123,6 +124,7 @@
       div.setAttribute('class', className || '');
       div.innerHTML = content;
       results.append(div);
+      script[0].scrollIntoView();
     }
 
     function runScript() {
@@ -143,7 +145,6 @@
         runScript();
         ev.preventDefault();
         script.val('');
-        script[0].scrollIntoView();
       }
       if (ev.keyCode == 38) { //UP
         if (commandIndex > 0) {

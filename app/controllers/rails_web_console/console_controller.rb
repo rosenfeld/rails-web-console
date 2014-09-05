@@ -9,17 +9,20 @@ module RailsWebConsole
     end
 
     def run
-      session[:script] = params[:script]
+      command = params[:script]
 
       stdout = ''
       stdout_orig = $stdout
       $stdout = StringIO.new
       begin
-        result_eval = eval params[:script], binding
+        if command[0, 5] == 'rake '
+          result = rake(command[5, command.length])
+        else
+          result = eval command, binding
+        end
         $stdout.rewind
         stdout = 'error during stdout capture'
         stdout = escape $stdout.read
-        result = result_eval
       rescue
         result = $!
       rescue SyntaxError => e
@@ -32,6 +35,19 @@ module RailsWebConsole
         type: get_type(result)
       })
     end
+
+    protected
+
+      # invoke rake task from here
+      def rake task
+        unless @tasks_loaded
+          require 'rake'
+          Rails.application.load_tasks
+          @tasks_loaded = true
+        end
+        Rake::Task[task].execute
+        nil
+      end
 
     private
 
