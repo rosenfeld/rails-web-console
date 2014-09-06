@@ -88,7 +88,14 @@
       color: white;
     }
   </style>
-  <script src="//code.jquery.com/jquery-2.1.1.min.js" type="text/javascript"></script>
+  <script>
+    window.console_context = <%=
+      {
+        run_path: rails_web_console.run_path
+      }.to_json.html_safe
+    %>
+  </script>
+  <%= javascript_include_tag "console" %>
 </head>
 <body>
   <div class="buttons">
@@ -105,64 +112,5 @@
     <textarea id="script" rows="1" cols="80"></textarea>
   </div>
 
-  <script>
-    var commandHistory = [];
-    var commandIndex = 0;
-    var run_path = '<%= rails_web_console.run_path %>';
-    var results = $('#results');
-    var runScriptButton = $('#run-script');
-
-    var script = $('#script');
-    script[0].focus();
-
-    runScriptButton.on('click', runScript);
-    script.on('keydown', onKeyDown);
-
-    function out(content, className) {
-      var div = document.createElement('div');
-      div.setAttribute('class', className || '');
-      div.innerHTML = content;
-      results.append(div);
-      script[0].scrollIntoView();
-    }
-
-    function runScript() {
-      var command = script.val();
-      commandHistory.push(command);
-
-      out("&#10095; "+command, 'command');
-
-      $.post(run_path, {script: command}, function(response) {
-        out(response.stdout, 'result type-stdout');
-        out(response.value, 'result type-'+response.type);
-      }, 'json')
-
-    }
-
-    function onKeyDown(ev) {
-      if (ev.keyCode == 13) {
-        runScript();
-        ev.preventDefault();
-        script.val('');
-      }
-      if (ev.keyCode == 38) { //UP
-        if (commandIndex > 0) {
-          commandIndex -= 1;
-        }
-        script.val(commandHistory[commandIndex]);
-      }
-      if (ev.keyCode == 40) { //DOWN
-        if (commandIndex < commandHistory.length) {
-          commandIndex += 1;
-        }
-        if (commandIndex == commandHistory.length) {
-          // scroll down to get empty prompt again
-          script.val('');
-        } else { 
-          script.val(commandHistory[commandIndex]);
-        }
-      }
-    }
-  </script>
 </body>
 </html>
