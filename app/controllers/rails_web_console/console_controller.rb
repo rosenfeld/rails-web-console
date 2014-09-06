@@ -1,11 +1,39 @@
 require 'stringio'
 
 module RailsWebConsole
+
+  class Context
+    def initialize
+      @block = Proc.new {}
+      @binding = binding
+    end
+
+    def run command
+      eval command, @binding
+    end
+
+    def help
+      puts <<-HELP
+
+Hi there! This is a pure web console
+------------------------------------
+  - you can run ruby as usual
+  - you can run rake tasks just as you would in terminal "rake ..."
+  - try up and down arrows to navigate past commands
+  - variables work as wel (set a = 1, read a -> 1)
+
+      HELP
+    end
+  end
+
+  $rails_web_console_context ||= Context.new
+
   class ConsoleController < ::ActionController::Base
     skip_before_action :verify_authenticity_token
     layout false
 
     def index
+      $rails_web_console_context = Context.new
     end
 
     def run
@@ -18,7 +46,8 @@ module RailsWebConsole
         if command[0, 5] == 'rake '
           result = rake(command[5, command.length])
         else
-          result = eval command, binding
+          #result = eval command, $rails_web_console_context.get_binding
+          result = $rails_web_console_context.run command
         end
         $stdout.rewind
         stdout = 'error during stdout capture'
