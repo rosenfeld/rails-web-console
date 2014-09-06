@@ -59,7 +59,7 @@ Hi there! This is a pure web console
       $stdout = stdout_orig
       render(json: {
         stdout: stdout,
-        value: escape(result.to_s),
+        value: escape(result.inspect),
         type: get_type(result)
       })
     end
