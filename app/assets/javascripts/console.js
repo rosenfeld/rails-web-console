@@ -28,13 +28,18 @@ function out(content, className) {
 
 function runScript() {
   var command = script.val();
+
+  out("&#10095; "+command, 'command');
+  script.val('');
+
+  if (command == '') {
+    return;
+  }
+
   commandHistory.push(command);
 
   // current command is the last one + 1 (which is empty)
   commandIndex = commandHistory.length();
-
-  out("&#10095; "+command, 'command');
-  script.val('');
 
   $.post(console_context.run_path, {script: command}, function(response) {
     out(response.stdout, 'result type-stdout');
