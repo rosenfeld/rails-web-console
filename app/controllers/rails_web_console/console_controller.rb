@@ -46,7 +46,6 @@ Hi there! This is a pure web console
         if command[0, 5] == 'rake '
           result = rake(command[5, command.length])
         else
-          #result = eval command, $rails_web_console_context.get_binding
           result = $rails_web_console_context.run command
         end
         $stdout.rewind
