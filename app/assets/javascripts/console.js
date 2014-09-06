@@ -15,6 +15,11 @@ var runScriptButton = $('#run-script');
 var script = $('#script');
 script[0].focus();
 
+$('html').on('click', function() {
+  console.log("AAAAAAAAAAAAAAAAAAA")
+  script[0].focus();
+});
+
 runScriptButton.on('click', runScript);
 script.on('keydown', onKeyDown);
 
