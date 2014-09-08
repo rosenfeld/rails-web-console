@@ -16,7 +16,6 @@ var script = $('#script');
 script[0].focus();
 
 $('html').on('click', function() {
-  console.log("AAAAAAAAAAAAAAAAAAA")
   script[0].focus();
 });
 
