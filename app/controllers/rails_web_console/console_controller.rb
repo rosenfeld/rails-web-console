@@ -51,9 +51,7 @@ Hi there! This is a pure web console
         $stdout.rewind
         stdout = 'error during stdout capture'
         stdout = escape $stdout.read
-      rescue
-        result = $!
-      rescue SyntaxError => e
+      rescue Exception => e
         result = e
       end
       $stdout = stdout_orig
