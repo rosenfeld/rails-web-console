@@ -53,7 +53,7 @@ Hi there! This is a pure web console
         stdout = escape $stdout.read
       rescue Exception => e
         result = e
-        stdout = e.message + "\n", e.backtrace[0..10].join("\n")
+        stdout = escape(e.message) + "\n", e.backtrace[0..10].join("\n")
       end
       $stdout = stdout_orig
       render(json: {
