@@ -49,10 +49,11 @@ Hi there! This is a pure web console
           result = $rails_web_console_context.run command
         end
         $stdout.rewind
-        stdout = 'error during stdout capture'
+        stdout = 'error during stdout rewing'
         stdout = escape $stdout.read
       rescue Exception => e
         result = e
+        stdout = e.message + "\n", e.backtrace[0..10].join("\n")
       end
       $stdout = stdout_orig
       render(json: {
