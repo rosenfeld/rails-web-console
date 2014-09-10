@@ -12,6 +12,36 @@ module RailsWebConsole
       eval command, @binding
     end
 
+    def routes match = nil
+      require 'terminal-table'
+      rows = Rails.application.routes.routes.map do |r| 
+        constraints = r.constraints.dup
+        method = constraints.delete(:request_method).to_s.gsub(/[^A-Z\|]/, '').split('|').reverse.join(', ')
+        # When TJ (maintainer of terminal-table) makes a new release, use the following line:
+        #[r.name.to_s, {:value => method, :alignment => :right}, r.path.spec, constraints.inspect]
+        [
+          r.name.to_s, 
+          method.rjust(12), 
+          r.path.spec, 
+          constraints == {} ? '' : constraints.inspect
+        ]
+      end
+
+      if match
+        rows.select! { |route| 
+          route.any? { |r| r.include?(match) }
+        }
+      end
+
+      puts Terminal::Table.new(
+        # arain, these are already implemented in terminal-table, but gem is not released
+        #:border_x => "",
+        #:border_y => "",
+        #:border_i => "",
+        :rows => rows
+      )
+    end
+
     def help
       puts <<-HELP
 

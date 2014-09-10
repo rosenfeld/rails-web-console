@@ -15,5 +15,6 @@ Gem::Specification.new do |s|
   s.files = Dir["{app,config,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.md"]
 
   s.add_dependency 'railties', '>= 3.1.0'
+  s.add_dependency 'terminal-table', '~> 1.4'
   #s.add_dependency 'actionview' # adding this would break support for older Rails versions
 end
