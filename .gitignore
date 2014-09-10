@@ -3,3 +3,10 @@ log/*.log
 pkg/
 /test_app/log/*.log
 /test_app/tmp
+
+# Vim files
+*.orig
+*swo
+*swp
+*swn
+*~
