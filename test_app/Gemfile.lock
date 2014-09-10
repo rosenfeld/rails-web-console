@@ -1,7 +1,7 @@
 PATH
   remote: ..
   specs:
-    rails-web-console (0.3.0)
+    rails-web-console (0.3.1)
       railties (>= 3.1.0)
 
 GEM
