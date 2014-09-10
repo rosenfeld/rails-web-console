@@ -8,4 +8,5 @@ pkg/
 *.orig
 *swo
 *swp
+*swn
 *~
