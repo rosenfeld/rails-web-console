@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'railties', '4.1.0.rc1'
+gem 'railties', '4.1.5'
 
 gem 'rails-web-console', path: '..'#, require: 'rails_web_console/engine'
 
