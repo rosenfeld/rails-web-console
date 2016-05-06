@@ -30,7 +30,7 @@ module RailsWebConsole
         $stdout.rewind
         result = %Q{<div class="stdout">#{escape $stdout.read}</div>
           <div class="return">#{escape result_eval.inspect}</div>}
-      rescue => e
+      rescue Exception => e
         result = e.to_s
       end
       $stdout = stdout_orig
