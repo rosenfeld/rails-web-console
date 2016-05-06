@@ -11,11 +11,21 @@ module RailsWebConsole
     def index
     end
 
+    SCRIPT_LIMIT = defined?(::WEB_CONSOLE_SCRIPT_LIMIT) ? ::WEB_CONSOLE_SCRIPT_LIMIT : 1000
+    WARNING_LIMIT_MSG = "WARNING: stored script in session was limited to the first " +
+      "#{SCRIPT_LIMIT} chars to avoid issues with cookie overflow\n"
     def run
-      session[:script] = params[:script]
+      # we limit up to 1k to avoid ActionDispatch::Cookies::CookieOverflow (4k) which we 
+      # can't rescue since it happens in a middleware
+      script = params[:script]
+      # we allow users to ignore the limit if they are using another session storage mechanism
+      script = script[0...SCRIPT_LIMIT] unless defined?(::WEB_CONSOLE_IGNORE_SCRIPT_LIMIT)
+      session[:script] = script
       stdout_orig = $stdout
       $stdout = StringIO.new
       begin
+        puts WARNING_LIMIT_MSG if params[:script].size > SCRIPT_LIMIT &&
+          !defined?(::WEB_CONSOLE_IGNORE_SCRIPT_LIMIT)
         result_eval = eval params[:script], binding
         $stdout.rewind
         result = %Q{<div class="stdout">#{escape $stdout.read}</div>
