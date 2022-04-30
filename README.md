@@ -1,4 +1,14 @@
-# RailsWebConsole
+# RailsWebConsole (No longer maintained)
+
+## Important note
+
+I've switched my Rails projects to Roda, so I'm no longer using rails-web-console. But I still
+use the same features. That's why I created the [rack_web_console](https://github.com/rosenfeld/rack_web_console)
+project. It only depends on Rack, so it can be used both in Roda projects as well as Rails ones,
+or whatever other Rack-based framework/library. It works the same way, but if someone feels they'd
+like to take over this project, just let me know.
+
+## Documentation
 
 A Rails mountable engine for running Ruby scripts on the browser in the context of a
 controller action.
